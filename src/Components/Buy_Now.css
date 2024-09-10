@@ -1,0 +1,48 @@
+.nav-out{
+    display: flex;
+    position: sticky;
+    top:0px;
+    flex-direction: row;
+    margin:0px;
+    margin-top: 0%;
+    height: 43px;
+    padding: 12px;
+    background-color: #FFFFFF;
+    padding-left: 80px;
+    font-weight: lighter;
+}
+.logo{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+    height: 35px;
+    margin-right: 50px;
+}
+.LoginConfirm{
+    height:70px;
+    background-color: #FFFFFF;
+    padding:10px;
+    font-size: 120%;
+}
+.deliveryAddress{
+    background-color: #FFFFFF;
+    margin-top: 10px;
+}
+.addNewAddress{
+    background-color: #FFFFFF;
+    padding: 10px;
+    margin-top: 10px;
+}
+.OrderSummery{
+    /* height:100px; */
+    background-color: #FFFFFF;
+    margin-top: 10px;
+    padding: 20px;
+}
+.PaymentOptions{
+    /* height:100px; */
+    background-color: #FFFFFF;
+    margin-top: 10px;
+    margin-bottom: 100px;
+    padding: 20px;
+}

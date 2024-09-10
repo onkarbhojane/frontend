@@ -1,0 +1,15 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.footer{
+    display: flex;
+    justify-content: space-evenly;
+    font-family: sans-serif;
+    padding: 40px 60px 0px;
+    padding-bottom: 15px;
+    height:'100vh';
+    width: fill;
+    background-color: black;
+    font-size: 12px;
+}

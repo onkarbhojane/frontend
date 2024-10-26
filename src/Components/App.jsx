@@ -22,7 +22,7 @@ import Buy_Now from './Buy_Now.jsx';
 
 
 const App = (props) => {
-    const {Product,SearchedProducts} = useContext(UserContext)
+    // const {Product,SearchedProducts} = useContext(UserContext)
     const createLink = (Name="") =>{
         let linkName="";
         for(let i=0;i<Name.length;i++){
@@ -47,7 +47,8 @@ const App = (props) => {
                         </>
                     }>
                     </Route>
-                    {Product.map((prdt,ind) => <Route key={`${prdt.Name}`} path={`Product/${createLink(prdt.Name)}`} element={<ProductCol data = {prdt}></ProductCol>}/>)}
+                    {/* {Product.map((prdt,ind) => <Route key={`${prdt.Name}`} path={`Product/${createLink(prdt.Name)}`} element={<ProductCol data = {prdt}></ProductCol>}/>)} */}
+                    <Route path='Product/:prdtId' element={<ProductCol ></ProductCol>}></Route>
                     <Route path='login' element={<div>
                         <LoginForm></LoginForm>
                         </div>}>
@@ -60,7 +61,6 @@ const App = (props) => {
                     </Route> */}
                     <Route path='/SignIn' element={<SignIn></SignIn>}/>
                     <Route path='/Search' element={<SearchProduct></SearchProduct>}></Route>
-                    {SearchedProducts.map((product,index) => <Route path={`Product/${createLink(product.Name)}`} element={<ProductCol data={product}></ProductCol>}></Route>)}
                 </Route>
                 {/* <Route path='cart'></Route> */}
                 <Route path='/details/cart' element={<Cart></Cart>}></Route>

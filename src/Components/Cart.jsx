@@ -23,18 +23,6 @@ const bt2={
 const Card = (props) => {
     const {setcartProduct,setcartProductInfo,cartProductInfo,cartProduct} = useContext(UserContext)
 
-
-    const createLink = (Name="") =>{
-        let linkName="";
-        for(let i=0;i<Name.length;i++){
-            if(Name[i]===' ' || Name[i]==',' || Name[i]=='#'){
-                linkName+='1';
-            }else linkName+=Name[i];
-        }
-        console.log(linkName)
-        return linkName;
-    }
-
     
     return (
         <>
@@ -57,20 +45,20 @@ const Card = (props) => {
                     fontSize:'17px',
                     marginLeft:'30px'
                 }}>
-                    <Link to={`/Product/${createLink(props.Item.Name)}` } style={{color:'black',textDecoration:'none'}} ><p style={{fontSize:'25px'}}>{props.Name}</p></Link>
+                    <Link to={`/Product/${props.Item._id}` } style={{color:'black',textDecoration:'none'}} ><p style={{fontSize:'25px'}}>{props.Name}</p></Link>
                     <div>
                         <button onClick={() => {
-                            for(let Item of cartProductInfo){
-                                if(Item == props.Item){
-                                    cartProductInfo.pop(Item);
-                                    cartProduct.pop(Item.Image);
-                                    break;
-                                }
-                            }
-                            console.log("save later clicked",Item.Name,cartProductInfo)
-                            setcartProduct(cartProduct)
-                            setcartProductInfo(cartProductInfo)
-                            console.log("after",cartProductInfo)
+                            // for(let Item of cartProductInfo){
+                            //     if(Item == props.Item){
+                            //         cartProductInfo.pop(Item);
+                            //         cartProduct.pop(Item.Image);
+                            //         break;
+                            //     }
+                            // }
+                            // console.log("save later clicked",Item.Name,cartProductInfo)
+                            // setcartProduct(cartProduct)
+                            // setcartProductInfo(cartProductInfo)
+                            // console.log("after",cartProductInfo)
                         }} style={{
                             border:'none',
                             backgroundColor:'white',
@@ -91,77 +79,23 @@ const Card = (props) => {
     )
 }
 
-const Item = (props) => {
-    const {user,setcartProduct,cartProduct} = useContext(UserContext)
-    const [product,setProduct] = useState([]);
-    const {cartProductInfo,setcartProductInfo} = useContext(UserContext)
-    const {BuyingProduct,setBuyingProduct} = useContext(UserContext)
-    const fetchProduct = async () => {
-        try{
-             const response = await axios.post("http://localhost:3000/cart/GetItems",{
-                Items:cartProduct
-             });
-             const Items = Object.values(response.data)
-             if(response){
-                setcartProductInfo(Items);
-                setBuyingProduct(Items)
-             }
-        }catch(error){
-            console.log("Error in fetching Products ",error)
-        }
-    }
-    fetchProduct();
-    useEffect(() => {
-        
-    },[])
+// const Item = (props) => {
+//     const {user,setcartProduct,cartProduct} = useContext(UserContext)
+//     const [product,setProduct] = useState([]);
+//     const {cartProductInfo,setcartProductInfo} = useContext(UserContext)
+//     const {BuyingProduct,setBuyingProduct} = useContext(UserContext)
+    
+//     useEffect(() => {
+//         console.log("eeeeeeeeeeeeeeeeeeeeee",props.Data)
+//     },[])
 
 
 
 
-    return (
-        <>
-        <div style={{
-            marginLeft:'100px',
-            backgroundColor:'white',
-            padding:'24px',
-            border:'2px solid black',
-            width:'800px',
-            marginTop:'20px',
-            fontSize:'17px'
-        }}>
-            <div style={{}}>
-                {
-                    cartProductInfo.map( (cont,index) => <Card Name={cont.Name} key={index} style={{textDecoration:"none",color:"black"}} Image={cont.Image} Item={cont} ></Card>)
-                }
-            </div> 
-            <div style={{
-                height:'60px',
-                width:'770px',
-                padding:'16px 22px',
-                // border:'2px solid gray'                      
-            }}>
-                <button style={bt2}>PLACE ORDER</button>
-            </div>
-        </div>
-        <div style={{
-            height:'400px',
-            width:'350px',
-            backgroundColor:'white',
-            marginTop:'20px',
-            fontSize:'17px',
-            marginRight:'100px',
-            position:'sticky',
-            top:'70px',
-            display:'flex',
-            flexDirection:'column',
-            justifyItems:'space-evenly',
-            padding:'20px'
-        }}>
-            <Detail cartItems={BuyingProduct}></Detail>
-        </div>
-        </>
-    )
-}
+//     return (
+//         <></>
+//     )
+// }
 
 
 const Detail = (props) => {
@@ -253,27 +187,34 @@ const Detail = (props) => {
 
 
 const Cart = (props) => {
-    const {user,setcartProduct,cartProduct} = useContext(UserContext)
+    // const {user,setcartProduct,cartProduct} = useContext(UserContext)
+    // const [product,setProduct] = useState([]);
+    const {user} = useContext(UserContext)
     const [product,setProduct] = useState([]);
+    const [cartProduct,setcartProduct] = useState([]);
+    const {BuyingProduct,setBuyingProduct} = useContext(UserContext)
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchProduct = async () => {
             try{
-                const response = await axios.post("http://localhost:3000/cart",{
-                    cart: user.cart
-                })
-                if(response.data.msg=='data found'){
-                    setcartProduct(response.data._doc.Product);
-                }else{
-                    console.log("cart not found")
-                }
+                console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.cart)
+                 const response = await axios.post("http://localhost:3000/cart/GetItems",{
+                    Items:user.cart
+                 });
+                 const Items = Object.values(response.data)
+                 console.log("lllllllllllllllllllllll",Items)
+                 if(response){
+                    setcartProduct(Items);
+                    setBuyingProduct(Items)
+                 }
             }catch(error){
-                console.log("cannot fetch the cart content")
+                console.log("Error in fetching Products ",error)
             }
         }
-        fetchData();
+        fetchProduct();
+        if(user.Name=="Login" && user.password=="password") return <LoginNeeded/>
+        if(user.cart.length==0) return <EmptyCart/>
     },[])
-    if(user.Name=="Login" && user.password=="password") return <LoginNeeded/>
-    if(cartProduct.length==0) return <EmptyCart/>
+    
     return (
         <>
             <Navbar bgcolor='deepskyblue'></Navbar>
@@ -282,7 +223,45 @@ const Cart = (props) => {
                 backgroundColor:'#D1CFCF',
                 justifyContent:"space-between"
             }}>
-                <Item></Item>
+                <div style={{
+                    marginLeft:'100px',
+                    backgroundColor:'white',
+                    padding:'24px',
+                    border:'2px solid black',
+                    width:'800px',
+                    marginTop:'20px',
+                    fontSize:'17px'
+                }}>
+                    <div style={{}}>
+                        {
+                            cartProduct.map( (cont,index) => <Card Name={cont.Name} key={index} style={{textDecoration:"none",color:"black"}} Image={cont.Image} Item={cont} ></Card>)
+                        }
+                    </div> 
+                    <div style={{
+                        height:'60px',
+                        width:'770px',
+                        padding:'16px 22px',
+                        // border:'2px solid gray'                      
+                    }}>
+                        <button style={bt2}>PLACE ORDER</button>
+                    </div>
+                </div>
+                <div style={{
+                    height:'400px',
+                    width:'350px',
+                    backgroundColor:'white',
+                    marginTop:'20px',
+                    fontSize:'17px',
+                    marginRight:'100px',
+                    position:'sticky',
+                    top:'70px',
+                    display:'flex',
+                    flexDirection:'column',
+                    justifyItems:'space-evenly',
+                    padding:'20px'
+                }}>
+                    <Detail cartItems={BuyingProduct}></Detail>
+                </div>
             </div>
         </>
     )

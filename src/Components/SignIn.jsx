@@ -1,4 +1,4 @@
-import React,{useContext, useState} from "react";
+import React,{useContext, useEffect, useState} from "react";
 import Navbar from './Navbar.jsx'
 import { Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -42,10 +42,15 @@ const Inputs = {
 }
 
 const SignIn = (props) => {
-    const {setUser} = useContext(UserContext);
+    const {setUser,user} = useContext(UserContext);
+    const {setcartProduct,cartProduct} = useContext(UserContext)
     const Navigate = useNavigate();
     const [mobileNo,setMobileNo] = useState();
     const [password,setpassword] = useState();
+    useEffect(()=>{
+        
+        console.log("mkashbckjadshflhrefkja",user.cart.length);
+    },[user])
     const Login = async () => {
         try{
             const response = await axios.post("http://localhost:3000/signIn",{
@@ -53,15 +58,28 @@ const SignIn = (props) => {
                 password:password
             });
             if(response.data.msg=='data found'){
-                setUser(response.data._doc);
+                setUser({...response.data._doc});
                 Navigate('/');
             }else{
 
             }
         }catch(error){
-            console.log("error in SignIn Process");
+            console.log("error in SignIn Process",error);
         }
     }
+    // const fetchData = async (cart) => {
+    //     try{
+    //         const response = await axios.get(`http://localhost:3000/cart/${cart}`)
+    //         if(response){
+    //             setcartProduct([response.data.Product]);
+    //             console.log("mkasclajhfboavk",cartProduct);
+    //         }else{
+    //             console.log("cart not found")
+    //         }
+    //     }catch(error){
+    //         console.log("cannot fetch the cart content",error)
+    //     }
+    // }
     return(
         <div style={{
             backgroundColor:'#D1CFCF',

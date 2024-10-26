@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../Context/userContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 
 const prdtPage={
     display:'flex',
@@ -67,17 +67,33 @@ const bt2={backgroundColor:'#FB641B',
 }
 
 const ProductCol = (props) => {
+    const {setcartProductInfo,setcartProduct,cartProductInfo}=useContext(UserContext);
+    const [data,setData] = useState({
+        Image:"#"
+    });
+    const {prdtId} = useParams();
+    useEffect(()=>{
+        const product=async()=>{
+            try{
+                const response=await axios.get(`http://localhost:3000/SearchProduct/${prdtId}`);
+                console.log("aishbckqflkjDNFHQBERFLEH",response.data);
+                setData(response.data);
+            }catch(error){
+                console.log("erorrrvnaehvbe")
+            }
+        }
+        product();
+    },[]);
     const {cartProduct,setBuyingProduct} = new useContext(UserContext)
-    const {user} = useContext(UserContext)
+    const {user,setUser} = useContext(UserContext)
     const navigate = useNavigate()
-    const description="Description  "
     const BuyProduct = () => {
             console.log("buyong lkjhgfdsa")
             if(user.Name==="Login"){
                 alert("You Are Not Logged in. Please Login.")
                 navigate('/login')
             }else {
-                setBuyingProduct([props.data])
+                setBuyingProduct([data])
                 console.log("Buying products are :: ",BuyProduct)
                 navigate(`/Product/Buy_Now`)
             }
@@ -89,19 +105,26 @@ const ProductCol = (props) => {
                 navigate('/login')
             }else{
                 let found=false;
-                for(let i in cartProduct){
-                    if(cartProduct[i]==props.data._id){
+                for(let i in user.cart){
+                    if(user.cart[i]==data._id){
                         found=true;
                         break;
                     }
                 }
                 if(!found){
+                    // alert("product already Added go to cart");
+                    console.log("ccccccccccccccccccccc",data._id)
+                    // setcartProduct([...cartProduct,prdtId])
+                    // setcartProductInfo([...cartProductInfo,data])
                     const response = await axios.post("http://localhost:3000/cart/AddProduct",{
-                        cart:user.cart,
-                        ProductId:props.data._id
+                        userId:user._id,
+                        ProductId:data._id
                     })
                     if(response){
-                        console.log("successfully Added !!! ");
+                        user.cart.push(data._id);
+                        setUser(user)
+                        console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhh",user)
+                        console.log("successfully Added !!! ",user.cart);
                     }else console.log("error At backend");
                 }
             }
@@ -111,35 +134,35 @@ const ProductCol = (props) => {
     }
 
 
-    const createLink = (Name="") =>{
-        let linkName="";
-        for(let i=0;i<Name.length;i++){
-            if(Name[i]===' ' || Name[i]==','){
-                linkName+='1';
-            }else linkName+=Name[i];
-        }
-        console.log(linkName)
-        return linkName;
-    }
+    // const createLink = (Name="") =>{
+    //     let linkName="";
+    //     for(let i=0;i<Name.length;i++){
+    //         if(Name[i]===' ' || Name[i]==','){
+    //             linkName+='1';
+    //         }else linkName+=Name[i];
+    //     }
+    //     console.log(linkName)
+    //     return linkName;
+    // }
 
     
     return(
         <div style={prdtPage}>
             <div style={imgSide}>
-                <img style={image} src={`${props.data.Image}`}/>
+                <img style={image} src={`${data.Image}`}/>
                 <div style={buttons}>
                     <button style={bt1} onClick={AddProduct}><i class="fa-solid fa-cart-shopping"></i> ADD TO CART</button>
                     <button style={bt2} onClick={BuyProduct}><i class="fa-solid fa-bolt-lightning"></i> BUY NOW</button>
                 </div>
             </div>
             <div style={content}>
-                <p style={{fontSize:'18px'}}>{props.data.Name}</p>
-                <p style={{fontSize:'28px',fontWeight:'bolder'}}>₹{props.data.Price}</p>
+                <p style={{fontSize:'18px'}}>{data.Name}</p>
+                <p style={{fontSize:'28px',fontWeight:'bolder'}}>₹{data.Price}</p>
                 <div style={{display:'flex',border:'2px gray solid',padding:'10px',borderRadius:'10px'}}>
                     <pre style={{fontFamily:'initial',fontWeight:'bold'}}>Description  </pre>
                     <p style={{
                         width:'600px'
-                    }}>{props.data.Discription}</p>
+                    }}>{data.Discription}</p>
                 </div>
             </div>
         </div>

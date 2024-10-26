@@ -27,7 +27,6 @@ const Card = (props) => {
 
 const BestSeller = (props) => {
     const [prdt,setprdt] = useState([]);
-    const {Product,setProduct} = useContext(UserContext);
     useEffect(() => {
         Data();
     },[])
@@ -37,7 +36,8 @@ const BestSeller = (props) => {
             .then((response) => {
                 if(response.status===200){
                     const productData = Object.values(response.data);
-                    setProduct([...productData])
+                    // setProduct([...productData])
+                    console.log("ddddddddddddddddddd",productData);
                     setprdt([...productData]);
                 }
             })
@@ -53,17 +53,17 @@ const BestSeller = (props) => {
 
     // used to avoid spaces in Link
 
-    const createLink = (Name="") =>{
-        let linkName="";
-        for(let i=0;i<Name.length;i++){
-            if(Name[i]===' ' || Name[i]===',' || Name[i]==='#' || Name[i]==='/' || Name[i]==='=' || Name[i]==='?' || Name[i]==='&' || Name[i]===':' || Name[i]==='@' || Name[i]==='+' || Name[i]==='%' || Name[i]==='(' 
-                || Name[i]===')' || Name[i]==='{' || Name[i]==='}' || Name[i]==='^' || Name[i]==='"' || Name[i]==='<' || Name[i]==='>'){
-                linkName+='1';
-            }else linkName+=Name[i];
-        }
-        console.log("App js ",linkName)
-        return encodeURIComponent(linkName);
-    }
+    // const createLink = (Name="") =>{
+    //     let linkName="";
+    //     for(let i=0;i<Name.length;i++){
+    //         if(Name[i]===' ' || Name[i]===',' || Name[i]==='#' || Name[i]==='/' || Name[i]==='=' || Name[i]==='?' || Name[i]==='&' || Name[i]===':' || Name[i]==='@' || Name[i]==='+' || Name[i]==='%' || Name[i]==='(' 
+    //             || Name[i]===')' || Name[i]==='{' || Name[i]==='}' || Name[i]==='^' || Name[i]==='"' || Name[i]==='<' || Name[i]==='>'){
+    //             linkName+='1';
+    //         }else linkName+=Name[i];
+    //     }
+    //     console.log("App js ",linkName)
+    //     return encodeURIComponent(linkName);
+    // }
     // if(prdt.length==0) return <h1>Load in some second</h1>
     return(
         <div style={{
@@ -81,7 +81,7 @@ const BestSeller = (props) => {
                 display:'flex',
                 justifyContent:'space-between',
                 }}>
-                {prdt.map((prdt1,ind) => <Link to={`/Product/${createLink(prdt1.Name)}`} key={ind} style={{color:'black',textDecoration:'none'}}><Card Image={prdt1.Image} Name={prdt1.Name.slice(0,11)} Price={prdt1.Price} ></Card></Link>)}
+                {prdt.map((prdt1,ind) => <Link to={`/Product/${prdt1._id}`} key={ind} style={{color:'black',textDecoration:'none'}}><Card Image={prdt1.Image} Name={prdt1.Name.slice(0,11)} Price={prdt1.Price} ></Card></Link>)}
             </div>
         </div>
     )

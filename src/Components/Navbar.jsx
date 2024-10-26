@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import {Link, NavLink, Outlet, useNavigate} from 'react-router-dom'
 import './Navbar.css'
 import Logo from '../Images/Logo.png'
@@ -13,10 +13,10 @@ const Navbar=(props)=>{
 
     const {user,cartProduct} = useContext(UserContext);
     const {searchText,setSearchText} = useContext(UserContext)
+    const [count,setCount]=useState(user.cart.length);
     const [searchTextLoc,setSearchTextLoc] = useState();
     const Navigate = useNavigate()
     const searchBar = useRef("")
-    
     const Search = () => {
         setSearchText(searchTextLoc)
         searchBar.current.value=''
@@ -48,7 +48,7 @@ const Navbar=(props)=>{
                 </NavLink>
                 <NavLink to='/details/cart' className="cart">
                     <i className="fa-solid fa-cart-plus" style={{marginBottom:'15px',marginRight:'7px'}}></i>
-                    <p>Cart {cartProduct.length}</p>
+                    <p>Cart {user.cart.length}</p>
                 </NavLink>
                 <NavLink to='/details/bestSeller' className="bestSellar">
                     <i className="fa-solid fa-store" style={{marginBottom:'15px',marginRight:'2px'}}></i>

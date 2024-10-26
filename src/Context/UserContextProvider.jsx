@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import UserContext from "./userContext.js";
 
 const UserContextProvider = ({children}) => {
-    const [user,setUser] = useState({Name:"Login",password:"password",Mobile_number:0,productClick:'Phones'});
+    const [user,setUser] = useState({Name:"Login",password:"password",Mobile_number:0,productClick:'Phones',cart:[]});
     const [Product,setProduct] = useState([{}])
     const [cartProduct,setcartProduct] = useState([])
     const [searchText,setSearchText] = useState("")
